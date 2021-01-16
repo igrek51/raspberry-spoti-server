@@ -20,7 +20,7 @@ cp mp3.mp3 /home/pi/
 cp pulseaudio-fuckup.sh /home/pi/
 
 sudo apt update
-sudo apt install -y vim htop iotop
+sudo apt install -y vim htop iotop wmctrl
 
 # Setup chromium media edition
 mkdir -p /home/pi/tmp
