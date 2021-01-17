@@ -14,12 +14,15 @@ from unidecode import unidecode
 class State(object):
     shutdown_counter: int = 0
     shutdown_last_click: int = 0
+    play_last_click: int = 0
 
 
 state = State()
+
 green_led = LED(17)
 blue_led = LED(27)
-button = Button(2)
+power_button = Button(2)
+play_button = Button(3)
 
 
 MORSE_CODES = {
@@ -121,7 +124,7 @@ def spotify_current_title() -> Optional[str]:
     return None
 
 
-def button_pressed():
+def power_button_pressed():
     now = time.time()
     if now - state.shutdown_last_click <= 1:
         state.shutdown_counter += 1
@@ -134,8 +137,15 @@ def button_pressed():
         shutdown()
 
 
-def button_released():
-    pass
+def play_button_pressed():
+    now = time.time()
+    if now - state.play_last_click <= 1:
+        print('next track')
+        shell("playerctl next")
+    else:
+        print('play/pause')
+        shell("playerctl play-pause")
+    state.play_last_click = now
 
 
 def simplify_string(s: str) -> str:
@@ -232,8 +242,8 @@ async def main_loop():
 
 def main():
     init_led()
-    button.when_pressed = button_pressed
-    button.when_released = button_released
+    power_button.when_pressed = power_button_pressed
+    play_button.when_pressed = play_button_pressed
 
     print("ready to work...")
     try:

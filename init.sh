@@ -20,7 +20,7 @@ cp mp3.mp3 /home/pi/
 cp pulseaudio-fuckup.sh /home/pi/
 
 sudo apt update
-sudo apt install -y vim htop iotop wmctrl
+sudo apt install -y vim htop iotop wmctrl playerctl
 
 pip3 install -r /home/pi/init/requirements.txt
 
@@ -44,5 +44,5 @@ EOF
 cat << 'EOF' > /home/pi/.config/autostart/gpio-controller.desktop
 [Desktop Entry] 
 Type=Application
-Exec=lxterminal -e /home/pi/init/control.py
+Exec=lxterminal -e "python3 -u /home/pi/init/control.py |& tee /home/pi/init/control.log"
 EOF
