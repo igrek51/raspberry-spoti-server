@@ -118,7 +118,7 @@ def spotify_current_title() -> Optional[str]:
                 logging.error(f"wmctrl output not matched: {line}")
                 return None
             title = match.group(1)
-            if "Spotify – Web Player" in title:
+            if "Spotify" in title and 'Web Player' in title:
                 return None
             return title
     logging.error(f"chromium window not found")
