@@ -23,43 +23,43 @@ button = Button(2)
 
 
 MORSE_CODES = {
-    'a': '.-',
-    'b': '-...',
-    'c': '-.-.',
-    'd': '-..',
-    'e': '.',
-    'f': '..-.',
-    'g': '--.',
-    'h': '....',
-    'i': '..',
-    'j': '.---',
-    'k': '-.-',
-    'l': '.-..',
-    'm': '--',
-    'n': '-.',
-    'o': '---',
-    'p': '.--.',
-    'q': '--.-',
-    'r': '.-.',
-    's': '...',
-    't': '-',
-    'u': '..-',
-    'v': '...-',
-    'w': '.--',
-    'x': '-..-',
-    'y': '-.--',
-    'z': '--..',
-    '1': '.----',
-    '2': '..---',
-    '3': '...--',
-    '4': '....-',
-    '5': '.....',
-    '6': '-....',
-    '7': '--...',
-    '8': '---..',
-    '9': '----.',
-    '0': '-----',
-    ' ': '/',
+    "a": ".-",
+    "b": "-...",
+    "c": "-.-.",
+    "d": "-..",
+    "e": ".",
+    "f": "..-.",
+    "g": "--.",
+    "h": "....",
+    "i": "..",
+    "j": ".---",
+    "k": "-.-",
+    "l": ".-..",
+    "m": "--",
+    "n": "-.",
+    "o": "---",
+    "p": ".--.",
+    "q": "--.-",
+    "r": ".-.",
+    "s": "...",
+    "t": "-",
+    "u": "..-",
+    "v": "...-",
+    "w": ".--",
+    "x": "-..-",
+    "y": "-.--",
+    "z": "--..",
+    "1": ".----",
+    "2": "..---",
+    "3": "...--",
+    "4": "....-",
+    "5": ".....",
+    "6": "-....",
+    "7": "--...",
+    "8": "---..",
+    "9": "----.",
+    "0": "-----",
+    " ": "/",
 }
 
 MORSE_DOT = 0.1
@@ -67,7 +67,6 @@ MORSE_DASH = 3 * MORSE_DOT
 MORSE_SIGNAL_BREAK = MORSE_DOT
 MORSE_LETTER_BREAK = 3 * MORSE_DOT
 MORSE_WORD_BREAK = 7 * MORSE_DOT
-
 
 
 def shell(cmd: str):
@@ -152,25 +151,25 @@ def to_morse(s: str) -> str:
     for c in s:
         if c in MORSE_CODES:
             codes.append(MORSE_CODES[c])
-    return ' '.join(codes)
+    return " ".join(codes)
 
 
 async def play_morse(led: LED, code: str):
     for c in code:
-        if c == '.':
+        if c == ".":
             blue_led.on()
             await asyncio.sleep(MORSE_DOT)
             blue_led.off()
             await asyncio.sleep(MORSE_SIGNAL_BREAK)
-        elif c == '-':
+        elif c == "-":
             blue_led.on()
             await asyncio.sleep(MORSE_DASH)
             blue_led.off()
             await asyncio.sleep(MORSE_SIGNAL_BREAK)
-        elif c == ' ':
+        elif c == " ":
             blue_led.off()
             await asyncio.sleep(MORSE_LETTER_BREAK)
-        elif c == '/':
+        elif c == "/":
             blue_led.off()
             await asyncio.sleep(MORSE_WORD_BREAK)
 
@@ -201,7 +200,7 @@ async def display_blue_status():
     song = spotify_current_title()
     if song:
         simple_title = simplify_string(song)
-        morse = to_morse(simple_title) + ' /'
+        morse = to_morse(simple_title) + " /"
         print(f'Spotify playing "{simple_title}": {morse}')
         await play_morse(blue_led, morse)
     else:
