@@ -6,6 +6,7 @@ from typing import Optional
 import re
 import asyncio
 from dataclasses import dataclass
+import logging
 
 from unidecode import unidecode
 
@@ -89,7 +90,7 @@ def shell_output(cmd: str):
 
 
 def shutdown():
-    print("shutting down...")
+    logging.info("shutting down...")
     for _ in range(10):
         green_led.off()
         time.sleep(0.04)
@@ -104,7 +105,7 @@ def check_spotify_sink_playing() -> bool:
         return False
     if "sink-input-by-application-name:Chromium" in output:
         return True
-    print("unknown pacmd output")
+    logging.error("unknown pacmd output")
     return False
 
 
@@ -114,13 +115,13 @@ def spotify_current_title() -> Optional[str]:
         if ".Chromium-browser" in line:
             match = re.search(r"raspberrypi +(.+)$", line)
             if not match:
-                print(f"wmctrl output not matched: {line}")
+                logging.error(f"wmctrl output not matched: {line}")
                 return None
             title = match.group(1)
-            if title == "Spotify – Web Player":
+            if "Spotify – Web Player" in title:
                 return None
             return title
-    print(f"chromium window not found")
+    logging.error(f"chromium window not found")
     return None
 
 
@@ -131,7 +132,7 @@ def power_button_pressed():
     else:
         state.shutdown_counter = 1
     state.shutdown_last_click = time.time()
-    print(f"click series: {state.shutdown_counter}")
+    logging.info(f"click series: {state.shutdown_counter}")
 
     if state.shutdown_counter >= 3:
         shutdown()
@@ -140,10 +141,10 @@ def power_button_pressed():
 def play_button_pressed():
     now = time.time()
     if now - state.play_last_click <= 1:
-        print('next track')
+        logging.info('next track')
         shell("playerctl next")
     else:
-        print('play/pause')
+        logging.info('play/pause')
         shell("playerctl play-pause")
     state.play_last_click = now
 
@@ -211,7 +212,7 @@ async def display_blue_status():
     if song:
         simple_title = simplify_string(song)
         morse = to_morse(simple_title) + " /"
-        print(f'Spotify playing "{simple_title}": {morse}')
+        logging.info(f'Spotify playing "{simple_title}": {morse}')
         await play_morse(blue_led, morse)
     else:
         blue_led.off()
@@ -241,11 +242,13 @@ async def main_loop():
 
 
 def main():
+    logging.basicConfig(level=logging.INFO, format='[%(asctime)s] %(levelname)s: %(message)s')
+
     init_led()
     power_button.when_pressed = power_button_pressed
     play_button.when_pressed = play_button_pressed
 
-    print("ready to work...")
+    logging.info("ready to work...")
     try:
         asyncio.run(main_loop())
 
