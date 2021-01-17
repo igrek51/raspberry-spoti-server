@@ -22,6 +22,8 @@ cp pulseaudio-fuckup.sh /home/pi/
 sudo apt update
 sudo apt install -y vim htop iotop wmctrl
 
+pip3 install -r /home/pi/init/requirements.txt
+
 # Setup chromium media edition
 mkdir -p /home/pi/tmp
 cd /home/pi/tmp
