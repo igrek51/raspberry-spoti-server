@@ -9,8 +9,6 @@ External LEDs indicate status, buttons control player:
 - Power Button - clicked 3 times in a row initiates system shutdown
 - Play Button - clicked once plays/pause Spotify, clicked twice in a row rewinds to a next song
 
-![RealWorld example](https://github.com/igrek51/raspberry-spoti-server/blob/master/img/spoti-server-picture.jpg?raw=true)  
-
 ## Setup
 
 1. Flash official RaspiOS `2020-12-02-raspios-buster-armhf.img` on SD.
